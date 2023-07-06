@@ -6,13 +6,13 @@ import com.example.tunisiacamp.services.ICampService;
 import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @RestController
 @AllArgsConstructor
+@CrossOrigin("http://localhost:4200")
 public class CampController {
 
     ICampService iCampService;
@@ -22,15 +22,46 @@ public class CampController {
         return iCampService.addEvent(e);
     }
 
+
     @PostMapping("/delete_event/{id}")
-    public ResponseEntity<String> deleteEvent(@PathVariable("id") Long id) {
-        try {
+    public void deleteEvent(@PathVariable("id") Long id) {
+
             iCampService.deleteEvent(id);
-            return new ResponseEntity<>("L'événement avec l'ID " + id + " a été supprimé.", HttpStatus.OK);
-        } catch (Exception e) {
-            return new ResponseEntity<>("Une erreur s'est produite lors de la suppression de l'événement avec l'ID " + id + ".", HttpStatus.INTERNAL_SERVER_ERROR);
+    }
+
+    @PutMapping("/update_event/{id}")
+    public ResponseEntity<Evenement> updateEvent(@PathVariable("id") Long id, @RequestBody Evenement e) {
+        e.setIdEvenement(id); // Assurez-vous de définir l'ID de l'événement à mettre à jour
+
+        Evenement updatedEvent = iCampService.updateEvent(e);
+        if (updatedEvent != null) {
+            return ResponseEntity.ok(updatedEvent);
+        } else {
+            return ResponseEntity.notFound().build();
         }
     }
+
+    @CrossOrigin("http://localhost:4200/")
+    @GetMapping("/events")
+    public List<Evenement> getAllEvents() {
+        return iCampService.getAllEvents();
+    }
+
+    @GetMapping("/events/{id}")
+    public ResponseEntity<Evenement> getEventById(@PathVariable Long id) {
+        Evenement evenement = iCampService.getEventById(id);
+        if (evenement != null) {
+            return ResponseEntity.ok(evenement);
+        } else {
+            return ResponseEntity.notFound().build();
+        }
+    }
+
+
+
+
+
+
 
 
 

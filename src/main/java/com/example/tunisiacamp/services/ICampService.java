@@ -10,7 +10,10 @@ public interface ICampService {
 
     public Evenement updateEvent (Evenement e);
     public void deleteEvent (Long id);
-    public List<Evenement> getAllEvent();
+
+    public Evenement getEventById(Long id);
+    public List<Evenement> getAllEvents();
+
 
 }
 
