@@ -1,13 +1,12 @@
 package com.example.tunisiacamp.services;
 
 import com.example.tunisiacamp.entites.Evenement;
+import com.example.tunisiacamp.entites.Panier;
 import com.example.tunisiacamp.repositories.EventRepository;
+import com.example.tunisiacamp.repositories.PanierRepository;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
-import org.springframework.web.bind.annotation.PatchMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestBody;
 
 import java.util.List;
 import java.util.Optional;
@@ -17,6 +16,7 @@ import java.util.Optional;
 @Slf4j
 public class ICampServiceImpl implements ICampService {
 
+    PanierRepository panierRepository;
     EventRepository eventRepository;
     @Override
     public Evenement addEvent(Evenement e) {
@@ -53,6 +53,14 @@ public class ICampServiceImpl implements ICampService {
         return optionalEvenement.orElse(null);
     }
 
+
+
+    @Override
+    public void ajouterEvenementAuPanier(Long panierId, Evenement evenement) {
+        Panier panier = panierRepository.findById(panierId).orElse(null);
+        panier.getEvenements().add(evenement);
+        panierRepository.save(panier);
+    }
 
     
 

@@ -8,6 +8,7 @@ import lombok.Setter;
 
 import javax.persistence.*;
 import java.util.Date;
+import java.util.List;
 
 @Entity
 @Getter
@@ -25,6 +26,9 @@ public class Evenement {
 
     @Temporal(TemporalType.DATE)
     private Date dateEvenement;
+
+    private int nbplace ;
+
 
 
 }

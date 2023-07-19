@@ -47,6 +47,7 @@ public class CampController {
         return iCampService.getAllEvents();
     }
 
+    @CrossOrigin("http://localhost:4200/")
     @GetMapping("/events/{id}")
     public ResponseEntity<Evenement> getEventById(@PathVariable Long id) {
         Evenement evenement = iCampService.getEventById(id);
@@ -57,6 +58,11 @@ public class CampController {
         }
     }
 
+    @CrossOrigin("http://localhost:4200/")
+    @PostMapping("/panier/{panierId}/evenements")
+    public void ajouterEvenementAuPanier(@PathVariable Long panierId, @RequestBody Evenement evenement) {
+        iCampService.ajouterEvenementAuPanier(panierId, evenement);
+    }
 
 
 

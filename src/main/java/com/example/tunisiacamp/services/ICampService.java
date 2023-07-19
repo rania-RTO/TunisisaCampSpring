@@ -14,6 +14,8 @@ public interface ICampService {
     public Evenement getEventById(Long id);
     public List<Evenement> getAllEvents();
 
+    void ajouterEvenementAuPanier(Long panierId, Evenement evenement);
+
 
 }
 
