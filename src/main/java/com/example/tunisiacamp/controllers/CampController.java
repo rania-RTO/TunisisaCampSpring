@@ -2,9 +2,9 @@ package com.example.tunisiacamp.controllers;
 
 
 import com.example.tunisiacamp.entites.Evenement;
+import com.example.tunisiacamp.entites.Panier;
 import com.example.tunisiacamp.services.ICampService;
 import lombok.AllArgsConstructor;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -18,12 +18,12 @@ public class CampController {
     ICampService iCampService;
 
     @PostMapping("/add_event")
-    public Evenement addClinique (@RequestBody Evenement e) {
+    public Evenement addEvent (@RequestBody Evenement e) {
         return iCampService.addEvent(e);
     }
 
-
-    @PostMapping("/delete_event/{id}")
+    @CrossOrigin("http://localhost:4200")
+    @DeleteMapping("/delete_event/{id}")
     public void deleteEvent(@PathVariable("id") Long id) {
 
             iCampService.deleteEvent(id);
@@ -47,6 +47,9 @@ public class CampController {
         return iCampService.getAllEvents();
     }
 
+
+
+
     @CrossOrigin("http://localhost:4200/")
     @GetMapping("/events/{id}")
     public ResponseEntity<Evenement> getEventById(@PathVariable Long id) {
@@ -58,20 +61,43 @@ public class CampController {
         }
     }
 
-    @CrossOrigin("http://localhost:4200/")
-    @PostMapping("/panier/{panierId}/evenements")
-    public void ajouterEvenementAuPanier(@PathVariable Long panierId, @RequestBody Evenement evenement) {
-        iCampService.ajouterEvenementAuPanier(panierId, evenement);
+
+
+    @PostMapping("/add_panier")
+    public Panier addPanier (@RequestBody Panier p) {
+        return iCampService.addPanier(p);
     }
 
+    @GetMapping("/panier/{id}")
+    public Panier getPanier(@PathVariable Long id) {
+        return iCampService.getPanier(id);
+    }
 
+    @CrossOrigin("http://localhost:4200")
+    @PostMapping("/{panierId}/addEvent")
+    public ResponseEntity<String> ajouterEvenementAuPanier(
+            @PathVariable Long panierId,
+            @RequestBody Evenement event) {
 
+        iCampService.ajouterEvenementAuPanier(panierId, event);
+        return ResponseEntity.ok("Événement ajouté au panier avec succès.");
+    }
 
+    @CrossOrigin("http://localhost:4200")
+    @GetMapping("/panier")
+    public List<Panier> getAllpanier() {
+        return iCampService.getAllpanier();
+    }
 
+    @PostMapping("/delete/{id}")
+    public void deletePanier(@PathVariable("id") Long id) {
+        iCampService.deletePanier(id);
+    }
 
-
-
-
+    @DeleteMapping("/panier/{panierId}/{eventId}")
+    public void deleteEventFromPanier(@PathVariable Long panierId, @PathVariable Long eventId) {
+        iCampService.deleteEventFromPanier(panierId, eventId);
+    }
 
 
 

@@ -53,15 +53,40 @@ public class ICampServiceImpl implements ICampService {
         return optionalEvenement.orElse(null);
     }
 
-
-
     @Override
-    public void ajouterEvenementAuPanier(Long panierId, Evenement evenement) {
-        Panier panier = panierRepository.findById(panierId).orElse(null);
-        panier.getEvenements().add(evenement);
-        panierRepository.save(panier);
+    public Panier addPanier(Panier p) {
+        return panierRepository.save(p);
     }
 
-    
+    public void deletePanier(Long id) {
+        panierRepository.deleteById(id);
+    }
+
+    @Override
+    public Panier getPanier(Long id) {
+        return panierRepository.findById(id).orElse(null);
+    }
+
+    public void ajouterEvenementAuPanier(Long panierId, Evenement event) {
+        Panier panier = panierRepository.findById(panierId).orElse(null);
+        if (panier != null) {
+            panier.getEvents().add(event);
+            panierRepository.save(panier);
+        }
+    }
+
+    @Override
+    public List<Panier> getAllpanier() {
+        return panierRepository.findAll();
+    }
+
+    @Override
+    public void deleteEventFromPanier(Long panierId, Long eventId) {
+        Panier panier = panierRepository.findById(panierId).orElse(null);
+        if (panier != null) {
+            panier.getEvents().removeIf(event -> event.getIdEvenement().equals(eventId));
+            panierRepository.save(panier);
+        }
+    }
 
 }
